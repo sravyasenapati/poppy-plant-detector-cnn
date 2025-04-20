@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poppy Plant Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-leaf"></i> Poppy Plant Detection</h1>
+      <p class="subtitle">Upload an image to detect poppy plants</p>
+    </header>
+    
+    <main>
+      <div class="upload-container">
+        <form action="/predict" method="POST" enctype="multipart/form-data" id="upload-form">
+          <div class="file-upload">
+            <div class="file-select">
+              <div class="file-select-button" id="fileName">Choose Image</div>
+              <div class="file-select-name" id="noFile">No image selected...</div>
+              <input type="file" name="image" id="file-input" accept="image/*" required>
+            </div>
+          </div>
+          
+          <!-- Image preview container -->
+          <div id="image-preview-container" style="display: none;">
+            <div class="preview-heading">Image Preview:</div>
+            <div class="image-preview">
+              <img id="preview-image" src="#" alt="Preview">
+            </div>
+          </div>
+          
+          <button type="submit" class="submit-btn"><i class="fas fa-search"></i> Detect Plants</button>
+        </form>
+      </div>
+    </main>
+    
+    <footer>
+      <p>© 2025 Poppy Plant Detection System</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('file-input').onchange = function() {
+      const fileName = this.value.split('\\').pop();
+      if (fileName) {
+        document.getElementById('noFile').innerHTML = fileName;
+        
+        // Image preview functionality
+        const previewContainer = document.getElementById('image-preview-container');
+        const previewImage = document.getElementById('preview-image');
+        const fileInput = this;
+        
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+          };
+          
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          previewContainer.style.display = 'none';
+        }
+      } else {
+        document.getElementById('noFile').innerHTML = 'No image selected...';
+        document.getElementById('image-preview-container').style.display = 'none';
+      }
+    };
+  </script>
+</body>
+</html>
